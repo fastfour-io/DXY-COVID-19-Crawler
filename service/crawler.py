@@ -117,9 +117,6 @@ class Crawler:
             # this part should not be used when checking the identical document.
             cities_backup = area.pop('cities')
 
-            # if self.db.find_one(collection='DXYArea', data=area):
-            #     continue
-
             # If this document is not in current database, insert this attribute back to the document.
             area['cities'] = cities_backup
 
@@ -156,9 +153,6 @@ class Crawler:
             country['continentName'] = country.pop('continents')
 
             country['comment'] = country['comment'].replace(' ', '')
-
-            # if self.db.find_one(collection='DXYArea', data=country):
-            #     continue
 
             country['countryName'] = country.get('provinceName')
             country['provinceShortName'] = country.get('provinceName')
