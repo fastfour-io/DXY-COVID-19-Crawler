@@ -56,7 +56,7 @@ class Crawler:
             abroad_information = self.abroad_parser(abroad_information=abroad_information)
 
             file_list=[
-                area_information,
+                area_information + abroad_information,
                 overall_information,
                 province_information,
                 abroad_information

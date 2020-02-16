@@ -5,7 +5,7 @@ from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 from service.crawler import Crawler
 
 sentry_sdk.init(
-    dsn=os.environ("SENTRY_DSN"),
+    dsn=os.environ["SENTRY_DSN"],
     integrations=[AwsLambdaIntegration()]
 )
 
