@@ -30,14 +30,12 @@ class Crawler:
     def __init__(self):
         self.session = requests.session()
         self.session.headers.update(headers)
-        self.crawl_timestamp = int()
 
     def run(self):
             self.crawler()
 
     def crawler(self):
         while True:
-            self.crawl_timestamp = int(datetime.datetime.timestamp(datetime.datetime.now()) * 1000)
             try:
                 r = self.session.get(url='https://3g.dxy.cn/newh5/view/pneumonia')
             except requests.exceptions.ChunkedEncodingError:
@@ -57,21 +55,6 @@ class Crawler:
             area_information = self.area_parser(area_information=area_information)
             abroad_information = self.abroad_parser(abroad_information=abroad_information)
 
-            # print(json.dumps(area_information, indent=4, sort_keys=True))
-            # with open('area.json', 'w') as outfile:
-            #     json.dump(area_information, outfile)
-            # with open('overall.json', 'w') as outfile:
-            #     json.dump(overall_information, outfile)
-            # with open('province.json', 'w') as outfile:
-            #     json.dump(province_information, outfile)
-            # with open('abroad.json', 'w') as outfile:
-            #     json.dump(abroad_information, outfile)
-            # file_list=[
-            #     os.path.abspath("area.json"),
-            #     os.path.abspath("overall.json"),
-            #     os.path.abspath("province.json"),
-            #     os.path.abspath("abroad.json")
-            # ]
             file_list=[
                 area_information,
                 overall_information,
@@ -111,7 +94,6 @@ class Crawler:
             province['comment'] = province['comment'].replace(' ', '')
 
             province['provinceEnglishName'] = city_name_map[province['provinceShortName']]['engName']
-            province['crawlTime'] = self.crawl_timestamp
             province['country'] = country_type_map.get(province['countryType'])
         return provinces
 
@@ -187,6 +169,7 @@ class Crawler:
         parent = repo.get_git_commit(master_sha)
         commit = repo.create_git_commit(commit_message, tree, [parent])
         master_ref.edit(commit.sha)
+        print(commit_message)
 
 
 
