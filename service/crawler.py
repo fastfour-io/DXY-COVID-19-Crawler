@@ -6,6 +6,7 @@
 """
 from bs4 import BeautifulSoup
 from service.nameMap import country_type_map, city_name_map, country_name_map, continent_name_map
+import lxml
 import os
 import datetime
 import re
@@ -41,7 +42,7 @@ class Crawler:
                 r = self.session.get(url='https://3g.dxy.cn/newh5/view/pneumonia')
             except requests.exceptions.ChunkedEncodingError:
                 continue
-            soup = BeautifulSoup(r.content, 'lxml')
+            soup = BeautifulSoup(r.content, "html.parser")
 
             overall_information = re.search(r'\{("id".*?)\]\}', str(soup.find('script', attrs={'id': 'getStatisticsService'})))
             province_information = re.search(r'\[(.*?)\]', str(soup.find('script', attrs={'id': 'getListByCountryTypeService1'})))
@@ -56,20 +57,26 @@ class Crawler:
             area_information = self.area_parser(area_information=area_information)
             abroad_information = self.abroad_parser(abroad_information=abroad_information)
 
-            print(json.dumps(area_information, indent=4, sort_keys=True))
-            with open('area.json', 'w') as outfile:
-                json.dump(area_information, outfile)
-            with open('overall.json', 'w') as outfile:
-                json.dump(overall_information, outfile)
-            with open('province.json', 'w') as outfile:
-                json.dump(province_information, outfile)
-            with open('abroad.json', 'w') as outfile:
-                json.dump(abroad_information, outfile)
+            # print(json.dumps(area_information, indent=4, sort_keys=True))
+            # with open('area.json', 'w') as outfile:
+            #     json.dump(area_information, outfile)
+            # with open('overall.json', 'w') as outfile:
+            #     json.dump(overall_information, outfile)
+            # with open('province.json', 'w') as outfile:
+            #     json.dump(province_information, outfile)
+            # with open('abroad.json', 'w') as outfile:
+            #     json.dump(abroad_information, outfile)
+            # file_list=[
+            #     os.path.abspath("area.json"),
+            #     os.path.abspath("overall.json"),
+            #     os.path.abspath("province.json"),
+            #     os.path.abspath("abroad.json")
+            # ]
             file_list=[
-                os.path.abspath("area.json"),
-                os.path.abspath("overall.json"),
-                os.path.abspath("province.json"),
-                os.path.abspath("abroad.json")
+                area_information,
+                overall_information,
+                province_information,
+                abroad_information
             ]
             file_names=[
                 "area.json",
@@ -172,9 +179,9 @@ class Crawler:
         base_tree = repo.get_git_tree(master_sha)
         element_list = list()
         for i, entry in enumerate(file_list):
-            with open(entry) as input_file:
-                data = input_file.read()
-            element = InputGitTreeElement(file_names[i], '100644', 'blob', data)
+            # with open(entry) as input_file:
+            #     data = input_file.read()
+            element = InputGitTreeElement(file_names[i], '100644', 'blob', json.dumps(entry))
             element_list.append(element)
         tree = repo.create_git_tree(element_list, base_tree)
         parent = repo.get_git_commit(master_sha)

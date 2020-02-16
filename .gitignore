@@ -7,3 +7,6 @@ service/__pycache__
 /overall.json
 /province.json
 package
+env
+/.DS_Store
+/function.zip
