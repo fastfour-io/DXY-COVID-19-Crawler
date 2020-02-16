@@ -2,3 +2,7 @@
 /venv/
 /.idea/
 service/__pycache__
+/abroad.json
+/area.json
+/overall.json
+/province.json
