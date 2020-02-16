@@ -2,3 +2,4 @@ bs4 >=0.0.1
 lxml >=4.4.2
 requests >=2.22.0
 PyGithub==1.46
+sentry_sdk=0.14.1
